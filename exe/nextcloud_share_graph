@@ -1,0 +1,3 @@
+#!/usr/bin/env ruby
+
+require "nextcloud_share_graph"
