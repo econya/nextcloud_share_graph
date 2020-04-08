@@ -1,3 +1,9 @@
+<!--
+SPDX-FileCopyrightText: 2020 Felix Wolfsteller
+
+SPDX-License-Identifier: AGPL-3.0-or-later
+-->
+
 # NextcloudShareGraph
 
 Render a graph of shared files within a nextcloud (18) instance with graphviz.

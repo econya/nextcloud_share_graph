@@ -1,3 +1,7 @@
+# SPDX-FileCopyrightText: 2020 Felix Wolfsteller
+#
+# SPDX-License-Identifier: AGPL-3.0-or-later
+
 require_relative 'lib/nextcloud_share_graph/version'
 
 Gem::Specification.new do |spec|
