@@ -6,5 +6,11 @@ require "nextcloud_share_graph/version"
 
 module NextcloudShareGraph
   class Error < StandardError; end
-  # Your code goes here...
+
+  def self.load_config
+    return @@config if defined?(@@config)
+
+    @@config = TTY::Config.new
+    @@config.filename = 'nextcloud_share_graph'
+  end
 end
