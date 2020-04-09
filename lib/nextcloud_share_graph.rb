@@ -6,6 +6,9 @@ require "nextcloud_share_graph/version"
 
 require "nextcloud_share_graph/config"
 
+require "nextcloud_share_graph/db"
+
+
 require "tty-config"
 
 module NextcloudShareGraph

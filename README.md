@@ -89,6 +89,10 @@ To install this gem onto your local machine, run `bundle exec rake install`. To 
 
 I wish.
 
+### Developer documentation / lessons learned and knowledge dump
+
+In [doc/knowledge_base.md](doc/knowledge_base.md).
+
 ## License headers
 
 Using FSFEs [reuse](https://reuse.software) headers for compliance (should be

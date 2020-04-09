@@ -31,4 +31,7 @@ Gem::Specification.new do |spec|
 
   spec.add_dependency "mysql2"
   spec.add_dependency "tty-config"
+  spec.add_dependency "ruby-graphviz"
+
+  #spec.add_dependency "nextcloud"
 end
