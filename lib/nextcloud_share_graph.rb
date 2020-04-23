@@ -8,11 +8,19 @@ require "nextcloud_share_graph/config"
 
 require "nextcloud_share_graph/db"
 
+require "nextcloud_share_graph/cheap_graph"
+
 
 require "tty-config"
 
+require 'logger'
+
 module NextcloudShareGraph
   class Error < StandardError; end
+
+  def self.logger
+    @@logger ||= Logger.new STDOUT
+  end
 
   def self.config
     @@config ||= load_config

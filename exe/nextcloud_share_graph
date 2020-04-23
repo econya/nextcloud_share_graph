@@ -5,3 +5,107 @@
 # SPDX-License-Identifier: AGPL-3.0-or-later
 
 require "nextcloud_share_graph"
+
+require "json"
+require "optparse"
+require 'ruby-graphviz'
+
+include NextcloudShareGraph
+
+options = {
+  users: true,
+  groups: true,
+  everybody_group: true,
+  groups_folders: true
+}
+
+OptionParser.new do |opts|
+  opts.banner = "Usage: #{$PROGRAM_NAME} [options]"
+  opts.separator ""
+  #opts.banner "Render (and overwrite) graph.png with data from a nextcloud (18) SQL db"
+
+  opts.on("-v", "--[no-]verbose", "Run verbosely") do |v|
+    options[:verbose] = v
+  end
+
+  opts.on("--[no-]users", "render users") do |v|
+    options[:users] = true
+  end
+
+  opts.on("--[no-groups", "render groups") do |g|
+    options[:groups] = g
+  end
+
+  opts.on("--[no-]everybody", "render everybody group") do |e|
+    options[:everybody_group] = e
+  end
+
+  opts.on("--[no-]group-folders", "render group-folders") do |g|
+    options[:group_folders] = g
+  end
+
+  opts.on("--open", "open rendered image upon completion") do |o|
+    options[:open] = true
+  end
+
+  opts.on("-h", "--help", "Show help message and exit") do
+    puts opts
+    exit 0
+  end
+  # TODO show version
+end.parse!
+
+if options[:verbose]
+  NextcloudShareGraph.logger.level = :debug
+else
+  NextcloudShareGraph.logger.level = :info
+end
+
+# Collect and load all data into memory first
+Group = Struct.new(:name, :gid, :type, :node)
+
+groups = Groups.all.map do |g|
+  NextcloudShareGraph.logger.debug "Add group #{g['displayname']}"
+  Group.new(g['displayname'], g['gid'], :nativ, nil)
+end
+
+Groups.ldap_groups.each do |ldap_group_result|
+  NextcloudShareGraph.logger.debug "Add ldap-group #{ldap_group_result['owncloud_name']}"
+  groups << Group.new(ldap_group_result["owncloud_name"], 'ldap', :ldap, nil)
+end
+
+User = Struct.new(:name, :uuid, :type, :node)
+users = Users.all.map do |u|
+  name = JSON.parse(u["data"])["displayname"]["value"]
+  User.new(name, u["uid"], nil, nil)
+end
+
+# Initialize graph
+graph = CheapGraph.new
+
+# Add data to graph
+groups.each do |group|
+  group.node = graph.add_node(
+    group.name,
+    label: "Group %s" % group.name,
+    fillcolor: '#eeeeee',
+    style:     'filled'
+  )
+end
+
+users.each do |user|
+  user.node = graph.add_node(
+    user.uuid,
+    label: user.name,
+    fillcolor: '#cccccc',
+    style:     'filled'
+  )
+end
+
+
+# Render graph
+graph.output png: 'output.png'
+
+# Exit graceful
+exit 0 if !options[:open]
+exec 'ristretto output.png' # TODO explain xdg-open
