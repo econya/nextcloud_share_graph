@@ -12,7 +12,7 @@ Render a graph of <del>shared files</del> something of a nextcloud (18) (mysql) 
 
 This piece of software is a total hack. Its not a proper script, because
 abstractions are done at the wrong level. Its not a proper app either, because
-of partly imperative and script-like programming, neither. It likely violates
+of partly imperative and script-like programming. It likely violates
 most programming desing principles you can find.
 
 There is a specific usecase without budget.
@@ -47,7 +47,7 @@ And then execute:
 
     $ bundle install
 
-Or install it yourself as:
+Or install it yourself (think of *standalone app*) as:
 
     $ gem install nextcloud_share_graph
 
@@ -55,7 +55,8 @@ Or install it yourself as:
 
 ### Configuration
 
-Configuration happens in `nextcloud_share_graph.conf.yml` (yep thats weird).
+Configuration happens in `nextcloud_share_graph.conf.yml` (yep thats weird and
+would be easy to fix).
 Following keys are supported atm:
 
 ```yaml
